@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+
+import { getPosts } from "./actions/posts";
 
 import Form from "./components/Form/Form";
 import Posts from "./components/Posts/Posts";
-
 import memories from "./images/memories.png";
 import makeStyles from "./styles";
 
 const App = () => {
     const classes = makeStyles();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getPosts());
+    }, [dispatch]);
 
     return (
         <Container maxWidth="lg">
@@ -22,15 +29,15 @@ const App = () => {
                     variant="h2"
                     align="center"
                 >
-                    Project MERN
-                </Typography>
+                    Project MERN{" "}
+                </Typography>{" "}
                 <img
                     className={classes.image}
                     src={memories}
                     alt="memories"
                     height="60"
                 />
-            </AppBar>
+            </AppBar>{" "}
             <Grow in>
                 <Container>
                     <Grid
