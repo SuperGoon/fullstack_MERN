@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-
 import { TextField, Typography, Button, Paper } from "@material-ui/core";
+import FileBase from "react-file-base64";
+
+import { useDispatch } from "react-redux";
+import { createPost } from "../../actions/posts";
 
 import useStyles from "./styles";
 
@@ -10,33 +13,39 @@ function Form(props) {
         Title: "",
         Message: "",
         Tags: "",
+        selectedFile: "",
     });
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        dispatch(createPost(postData));
     };
+
+    const handleClear = () => {};
+
     return (
         <Paper className={classes.paper}>
             <form
-                className={classes.form}
+                className={`${classes.root} ${classes.form}`}
                 noValidate
                 autoComplete="off"
                 onSubmit={handleSubmit}
             >
                 <Typography variant="h5">Creator and Memory</Typography>
                 <TextField
-                    className={classes.fileInput}
+                    fullWidth
                     name="Creator"
                     value={postData.Creator}
                     label="Creator"
                     variant="outlined"
                     onChange={(e) => {
-                        setPostData({ ...postData, creator: e.target.value });
+                        setPostData({ ...postData, Creator: e.target.value });
                     }}
                 />
                 <TextField
-                    className={classes.fileInput}
+                    fullWidth
                     name="Title"
                     value={postData.Title}
                     label="Title"
@@ -46,7 +55,7 @@ function Form(props) {
                     }}
                 />
                 <TextField
-                    className={classes.fileInput}
+                    fullWidth
                     name="Message"
                     value={postData.Message}
                     label="Message"
@@ -56,7 +65,7 @@ function Form(props) {
                     }}
                 />
                 <TextField
-                    className={classes.fileInput}
+                    fullWidth
                     name="Tags"
                     value={postData.Tags}
                     label="Tags"
@@ -65,6 +74,35 @@ function Form(props) {
                         setPostData({ ...postData, Tags: e.target.value });
                     }}
                 />
+                <div className={classes.fileInput}>
+                    <FileBase
+                        type="file"
+                        multiple={false}
+                        onDone={({ base64 }) =>
+                            setPostData({ ...postData, selectedFile: base64 })
+                        }
+                    />
+                </div>
+                <Button
+                    className={classes.buttonSubmit}
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    type="submit"
+                    fullWidth
+                >
+                    Submit
+                </Button>
+                <Button
+                    className={classes.buttonSubmit}
+                    variant="contained"
+                    color="secondary"
+                    size="medium"
+                    onClick={handleClear}
+                    fullWidth
+                >
+                    Clear
+                </Button>
             </form>
         </Paper>
     );
